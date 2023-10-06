@@ -1,7 +1,12 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from src.config import Base
-# from src.models.post import Post
+from src.models.post import Post
+from sqlalchemy.event import listens_for
+from src.config import SessionLocal
+from sqlalchemy.orm import Session
+
+db = SessionLocal()
 
 
 class Comment(Base):
@@ -13,5 +18,17 @@ class Comment(Base):
     post_id = Column(Integer, ForeignKey("posts.id"))
 
     # users = relationship("User", back_populates="comments")
-    # posts = relationship("Post", back_populates='comments')
-    
+    posts = relationship("Post", back_populates='comments', lazy='joined')
+
+
+
+# This function will be called after a new comment is inserted
+# increase comment count when new comment is add
+@listens_for(Comment, 'after_insert')
+def increment_comment_count(mapper, connection, comment):
+    post_id = comment.post_id
+    post = db.query(Post).filter(Post.id==post_id).first()
+    post.number_of_comments = post.number_of_comments + 1 
+    db.commit()
+    db.refresh(post)
+    # connection.execute(Post.__table__.update().values(number_of_comments=post.number_of_comments).where(Post.id == post_id))
