@@ -11,10 +11,6 @@ def add_new_comment(post_id:int, request:Request, comment:CommentSchema, db:Sess
         user_id = get_current_user_id(request),
         post_id = post_id
     )
-    comment = db.query(Comment).first()
-    print(comment)
-    print("==========gfgddhfhghfdhdd======",comment.posts)
-    # print("================",comment.posts.number_of_comments)
     db.add(new_comment)
     db.commit()
     db.refresh(new_comment)
