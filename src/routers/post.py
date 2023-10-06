@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, Request
-from src.services.post_services import create_post
-from src.schemas.post_schema import PostSchema
+from services.post import create_post
+from schemas.post import PostSchema
 from src.config import SessionLocal
 
 

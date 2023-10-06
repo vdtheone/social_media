@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Request, status
-from src.schemas.post_schema import PostSchema
+from schemas.post import PostSchema
 from src.models.post import Post
 from sqlalchemy.orm import Session
 from jose import ExpiredSignatureError, JWTError, jwt

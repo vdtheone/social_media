@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, Request
 from src.config import SessionLocal
 from src.utils.generate_jwt_token import create_jwt_token
-from src.services.user_services import all_user, create_user_new, login
-from src.schemas.user_schema import GetAllUser, UserLogin, CreateUserSchema
+from services.user import all_user, create_user_new, login
+from schemas.user import GetAllUser, UserLogin, CreateUserSchema
 
 
 user_router = APIRouter()

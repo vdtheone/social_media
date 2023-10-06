@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Request, status
-from src.schemas.user_schema import UserLogin, CreateUserSchema
+from schemas.user import UserLogin, CreateUserSchema
 from src.models.user import User
 from sqlalchemy.orm import Session
 
