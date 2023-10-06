@@ -20,7 +20,7 @@ def verify_password(password: str, hashed_pass: str) -> bool:
 
 def create_jwt_token(data):
     to_encode = data
-    expire = datetime.utcnow() + timedelta(minutes=30)
+    expire = datetime.utcnow() + timedelta(minutes=300)
     to_encode.update({"exp":expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return f"{'Bearer '}{encoded_jwt}"
