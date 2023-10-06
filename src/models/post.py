@@ -18,5 +18,5 @@ class Post(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
 
     users = relationship("User", back_populates="posts")
-    # comments = relationship("Comment", back_populates='posts')
+    comments = relationship("Comment", back_populates='posts')
     # likes = relationship("Like", back_populates='posts')
