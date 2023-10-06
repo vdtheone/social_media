@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Request, status
-from schemas.user import UserLogin, CreateUserSchema
+from src.schemas.user import UserLogin, CreateUserSchema
 from src.models.user import User
 from sqlalchemy.orm import Session
 
@@ -62,3 +62,13 @@ def login(request: Request, user: UserLogin, db: Session):
 def all_user(request: Request, db: Session):
     all_user = db.query(User).all()
     return all_user
+
+
+def get_user_by_id(id:int, request:Request, db:Session):
+    user = db.query(User).get(id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    print(user.posts)
+    for i in user.posts:
+        print(i.location)
+    return user
