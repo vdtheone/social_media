@@ -4,7 +4,6 @@ from sqlalchemy.orm import relationship
 from src.config import Base
 
 
-
 class Like(Base):
     __tablename__ = "likes"
 
@@ -14,4 +13,5 @@ class Like(Base):
     post_id = Column(Integer, ForeignKey("posts.id"))
 
     # users = relationship("User", back_populates="likes")
-    # posts = relationship("Post", back_populates='likes')
+    posts = relationship("Post", back_populates='likes')
+
