@@ -4,7 +4,6 @@ from src.config import Base
 from src.models.post import Post
 from sqlalchemy.event import listens_for
 from src.config import SessionLocal
-from sqlalchemy.orm import Session
 
 db = SessionLocal()
 
