@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String
 from sqlalchemy.orm import relationship
 from src.config import Base
 
@@ -12,11 +12,15 @@ class Post(Base):
     id = Column(Integer, primary_key=True, index=True)
     location = Column(String)
     caption = Column(String)
-    upload_time = Column(DateTime, default=datetime.now())
+    image = Column(String)
     number_of_likes = Column(Integer, default=0)
     number_of_comments = Column(Integer, default=0)
     user_id = Column(Integer, ForeignKey("users.id"))
+    created_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, default=datetime.now())
 
     users = relationship("User", back_populates="posts")
     comments = relationship("Comment", back_populates='posts')
-    likes = relationship("Like", back_populates='posts')
+
+    # Relationship: Many-to-Many with User (to represent users who liked the post)
+    likers = relationship("User", secondary="likes", back_populates="liked_posts")
