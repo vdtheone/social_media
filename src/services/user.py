@@ -31,7 +31,6 @@ def create_user_new(request: Request, user: CreateUserSchema, db: Session):
     db.commit()
     db.refresh(create_new_user)
     return {"Message": "User created"}
-    # return create_new_user
 
 
 def login(request: Request, user: UserLogin, db: Session):
