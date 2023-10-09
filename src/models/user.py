@@ -22,5 +22,7 @@ class User(Base):
 
 
     posts = relationship("Post", back_populates='users')
-    # # comments = relationship("Comment", back_populates='users')
-    # likes = relationship("Like", back_populates='users')
+    comments = relationship("Comment", back_populates='users')
+
+    # Relationship: Many-to-Many with Post (to represent liked posts)
+    liked_posts = relationship("Post", secondary="likes", back_populates="likers")
