@@ -5,10 +5,10 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.models.user import User 
-from src.models.post import Post
 from src.models.comment import Comment
 from src.models.like import Like
+from src.models.user import User
+from src.models.post import Post
 from src.config import Base
 
 # this is the Alembic Config object, which provides
