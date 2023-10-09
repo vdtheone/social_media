@@ -1,9 +1,10 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from src.config import Base
 from src.models.post import Post
 from sqlalchemy.event import listens_for
 from src.config import SessionLocal
+from datetime import datetime
 
 db = SessionLocal()
 
@@ -15,9 +16,11 @@ class Comment(Base):
     desc = Column(String)
     user_id = Column(Integer, ForeignKey("users.id"))
     post_id = Column(Integer, ForeignKey("posts.id"))
+    created_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, default=datetime.now())
 
-    # users = relationship("User", back_populates="comments")
-    posts = relationship("Post", back_populates='comments', lazy='joined')
+    users = relationship("User", back_populates="comments")
+    posts = relationship("Post", back_populates='comments')
 
 
 
