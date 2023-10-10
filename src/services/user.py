@@ -1,18 +1,19 @@
 from datetime import datetime
+
 from fastapi import HTTPException, Request, status
 from sqlalchemy import desc
-from src.models.post import Post
-from src.schemas.user import UpdateUser, UserLogin, CreateUserSchema
-from src.models.user import User
 from sqlalchemy.orm import Session
 
-from src.utils.required_jwt import access_token_required
+from src.models.post import Post
+from src.models.user import User
+from src.schemas.user import CreateUserSchema, UpdateUser, UserLogin
 from src.utils.generate_jwt_token import (
     create_jwt_token,
     create_refresh_token,
     get_hashed_password,
     verify_password,
 )
+from src.utils.required_jwt import access_token_required
 
 
 def create_user_new(request: Request, user: CreateUserSchema, db: Session):
@@ -67,7 +68,11 @@ def all_user(request: Request, db: Session):
 
 
 def get_user_by_id(id: int, request: Request, db: Session):
-    user = db.query(User).filter(User.id==id, User.is_active==True, User.is_deleted==False).first()
+    user = (
+        db.query(User)
+        .filter(User.id == id, User.is_active is True, User.is_deleted is False)
+        .first()
+    )
     # user = db.query(User).order_by(desc(User.liked_posts)).all()
     if not user:
         raise HTTPException(
@@ -77,7 +82,11 @@ def get_user_by_id(id: int, request: Request, db: Session):
 
 
 def get_all_post_by_user(id: int, request: Request, db: Session):
-    user = db.query(User).filter(User.id==id, User.is_active==True, User.is_deleted==False).first()
+    user = (
+        db.query(User)
+        .filter(User.id == id, User.is_active is True, User.is_deleted is False)
+        .first()
+    )
     post = (
         db.query(Post).filter(Post.user_id == id).order_by(desc(Post.created_at)).all()
     )
@@ -88,7 +97,7 @@ def get_all_post_by_user(id: int, request: Request, db: Session):
     return {"user_name": user.username, "post": post}
 
 
-def update_user_details(id:int, request:Request, user:UpdateUser, db:Session):
+def update_user_details(id: int, request: Request, user: UpdateUser, db: Session):
     user_instance = db.query(User).get(id)
     user_instance.first_name = user.first_name
     user_instance.last_name = user.last_name
@@ -101,10 +110,10 @@ def update_user_details(id:int, request:Request, user:UpdateUser, db:Session):
     return user_instance
 
 
-def delete_user(id:int, request:Request, db:Session):
+def delete_user(id: int, request: Request, db: Session):
     user = db.query(User).get(id)
     user.is_active = False
     user.is_deleted = True
     db.commit()
     db.refresh(user)
-    return {"message":"User Deleted"}
+    return {"message": "User Deleted"}

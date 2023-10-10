@@ -1,6 +1,7 @@
-from datetime import datetime, timedelta
 import os
+from datetime import datetime, timedelta
 from typing import Any, Union
+
 from jose import jwt
 from passlib.context import CryptContext
 
@@ -21,20 +22,16 @@ def verify_password(password: str, hashed_pass: str) -> bool:
 def create_jwt_token(data):
     to_encode = data
     expire = datetime.utcnow() + timedelta(minutes=300)
-    to_encode.update({"exp":expire})
+    to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return f"{'Bearer '}{encoded_jwt}"
 
 
 def create_refresh_token(subject: Union[dict, Any], expires_delta: int = None) -> str:
     if expires_delta is not None:
-        expires_delta = datetime.utcnow() + timedelta(
-            minutes=expires_delta
-        )
+        expires_delta = datetime.utcnow() + timedelta(minutes=expires_delta)
     else:
-        expires_delta = datetime.utcnow() + timedelta(
-            minutes=30
-        )
+        expires_delta = datetime.utcnow() + timedelta(minutes=30)
 
     to_encode = {"exp": expires_delta, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, JWT_REFRESH_SECRET_KEY, ALGORITHM)

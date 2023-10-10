@@ -1,9 +1,10 @@
 from fastapi import HTTPException, Request, status
+from sqlalchemy.orm import Session
+
 from src.models.comment import Comment
 from src.models.post import Post
 from src.models.user import User
 from src.schemas.comment import CommentSchema
-from sqlalchemy.orm import Session
 from src.utils.currunt_user_id import get_current_user_id
 
 
@@ -28,4 +29,4 @@ def delete_user_comment(id: int, request: Request, db: Session):
     comment = db.query(Comment).get(id)
     db.delete(comment)
     db.commit()
-    return {"message":"commnet deleted"}
+    return {"message": "commnet deleted"}

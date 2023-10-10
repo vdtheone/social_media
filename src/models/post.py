@@ -1,10 +1,13 @@
 from datetime import datetime
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+
 from src.config import Base
 
 # from src.models.user import User
 # from src.models.like import Like
+
 
 class Post(Base):
     __tablename__ = "posts"
@@ -20,7 +23,7 @@ class Post(Base):
     updated_at = Column(DateTime, default=datetime.now())
 
     users = relationship("User", back_populates="posts")
-    comments = relationship("Comment", back_populates='posts')
+    comments = relationship("Comment", back_populates="posts")
 
     # Relationship: Many-to-Many with User (to represent users who liked the post)
     likers = relationship("User", secondary="likes", back_populates="liked_posts")

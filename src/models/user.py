@@ -1,10 +1,13 @@
 from datetime import datetime
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
+
+from sqlalchemy import Boolean, Column, DateTime, Integer, String
 from sqlalchemy.orm import relationship
+
 from src.config import Base
 
 # from models.like import Like
 # from models.post import Post
+
 
 class User(Base):
     __tablename__ = "users"
@@ -16,13 +19,12 @@ class User(Base):
     username = Column(String, unique=True)
     password = Column(String)
     is_active = Column(Boolean, default=True)
-    is_deleted = Column(Boolean, default=False)   
+    is_deleted = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
-
-    posts = relationship("Post", back_populates='users')
-    comments = relationship("Comment", back_populates='users')
+    posts = relationship("Post", back_populates="users")
+    comments = relationship("Comment", back_populates="users")
 
     # Relationship: Many-to-Many with Post (to represent liked posts)
     liked_posts = relationship("Post", secondary="likes", back_populates="likers")

@@ -1,6 +1,7 @@
-from fastapi import HTTPException, Request, status
-from jose import ExpiredSignatureError, JWTError, jwt
 import os
+
+from fastapi import HTTPException, Request, status
+from jose import ExpiredSignatureError, JWTError
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = os.environ.get("ALGORITHM")
