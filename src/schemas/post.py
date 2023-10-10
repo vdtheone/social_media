@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 from fastapi import UploadFile
 from pydantic import BaseModel
 
@@ -33,3 +34,7 @@ class PostWithUser(BaseModel):
 
 class PostWithUser_(PostSchema):
     username:str
+
+
+class SelectedPost(BaseModel):
+    ids:List[int]

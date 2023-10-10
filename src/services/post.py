@@ -1,6 +1,7 @@
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, List
 from fastapi import Form, HTTPException, Request, UploadFile, status
+from src.schemas.post import SelectedPost
 from src.models.post import Post
 from src.utils.currunt_user_id import get_current_user_id
 from sqlalchemy.orm import Session
@@ -89,3 +90,24 @@ def post_user(request: Request, db: Session):
             status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
         )
     return post_list
+
+
+def delete_post(id:int, request:Request, db:Session):
+    post = db.query(Post).get(id)
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
+        )
+    db.delete(post)
+    db.commit()
+    return {"message":"Post Deleted"}
+
+
+def delete_all_post(request:Request, post:SelectedPost, db:Session):
+    for id in post.ids:
+        post = db.query(Post).get(id)
+        if post:
+            db.delete(post)
+            db.commit()
+    
+    return {"message":"Selected Posts Deleted"}
