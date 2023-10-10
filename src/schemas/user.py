@@ -1,12 +1,15 @@
 from datetime import datetime
-from pydantic import BaseModel
+from typing import List
+from pydantic import BaseModel, root_validator
+
+from src.schemas.post import PostCreateSchema, PostSchema
 
 
-class GetAllUser(BaseModel):
-    first_name :str
-    last_name  :str
-    mobile_no  :int
-    username  :str
+class GetUser(BaseModel):
+    first_name : str
+    last_name  : str
+    mobile_no  : int
+    username  : str
     created_at: datetime
     updated_at: datetime
     is_active : bool
@@ -16,16 +19,28 @@ class GetAllUser(BaseModel):
         from_attributes = True
 
 
-class CreateUserSchema(GetAllUser):
-    password  :str
+class CreateUserSchema(GetUser):
+    password : str
 
     class Config:
         from_attributes = True
 
 
 class UserLogin(BaseModel):
-    username:str
-    password:str
+    username : str
+    password : str
 
     class Config:
         from_attributes = True
+
+
+class UserWithPosts(GetUser):
+    posts: List[PostSchema]
+
+
+class UpdateUser(BaseModel):
+    first_name : str
+    last_name : str
+    mobile_no : int
+    username : str
+    password : str

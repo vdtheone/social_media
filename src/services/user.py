@@ -1,5 +1,8 @@
+from datetime import datetime
 from fastapi import HTTPException, Request, status
-from src.schemas.user import UserLogin, CreateUserSchema
+from sqlalchemy import desc
+from src.models.post import Post
+from src.schemas.user import UpdateUser, UserLogin, CreateUserSchema
 from src.models.user import User
 from sqlalchemy.orm import Session
 
@@ -63,11 +66,45 @@ def all_user(request: Request, db: Session):
     return all_user
 
 
-def get_user_by_id(id:int, request:Request, db:Session):
-    user = db.query(User).get(id)
+def get_user_by_id(id: int, request: Request, db: Session):
+    user = db.query(User).filter(User.id==id, User.is_active==True, User.is_deleted==False).first()
+    # user = db.query(User).order_by(desc(User.liked_posts)).all()
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    print(user.posts)
-    for i in user.posts:
-        print(i.location)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     return user
+
+
+def get_all_post_by_user(id: int, request: Request, db: Session):
+    user = db.query(User).filter(User.id==id, User.is_active==True, User.is_deleted==False).first()
+    post = (
+        db.query(Post).filter(Post.user_id == id).order_by(desc(Post.created_at)).all()
+    )
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+    return {"user_name": user.username, "post": post}
+
+
+def update_user_details(id:int, request:Request, user:UpdateUser, db:Session):
+    user_instance = db.query(User).get(id)
+    user_instance.first_name = user.first_name
+    user_instance.last_name = user.last_name
+    user_instance.mobile_no = user.mobile_no
+    user_instance.username = user.username
+    user_instance.password = user.password
+    user_instance.updated_at = datetime.now()
+    db.commit()
+    db.refresh(user_instance)
+    return user_instance
+
+
+def delete_user(id:int, request:Request, db:Session):
+    user = db.query(User).get(id)
+    user.is_active = False
+    user.is_deleted = True
+    db.commit()
+    db.refresh(user)
+    return {"message":"User Deleted"}
