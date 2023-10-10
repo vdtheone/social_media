@@ -1,11 +1,9 @@
 from pathlib import Path
 from typing import Annotated
 from fastapi import Form, HTTPException, Request, UploadFile, status
-from src.schemas.post import PostSchema
 from src.models.post import Post
 from src.utils.currunt_user_id import get_current_user_id
 from sqlalchemy.orm import Session
-from jose import jwt
 import os
 
 IMGDIR = "images"
@@ -22,14 +20,11 @@ async def create_post(
     db: Session,
 ):
     user_id = get_current_user_id(request)
-
     data = await image.read()
     content_type = image.content_type
     filename = image.filename
 
-    print(content_type)
-
-    if not content_type == 'image/jpeg':
+    if not content_type == "image/jpeg":
         raise HTTPException(status_code=403, detail="Invalid format")
 
     # Create the folder if it doesn't exist
@@ -54,9 +49,43 @@ def get_all_post(request: Request, db: Session):
 
 def post_by_id(id: int, request: Request, db: Session):
     post = db.query(Post).get(id)
+
+    with open(os.path.join(IMGDIR, post.image), "rb") as my_file:
+        data = my_file.read()
+    
+    print(data)
+
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
         )
-    # print(post.users.username) #get user by post
     return post
+
+
+def post_with_user_(request: Request, db: Session):
+    posts = db.query(Post).all()
+
+    for post in list(posts):
+        post.__dict__.update({"username": post.users.username})
+
+    if not posts:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
+        )
+    return posts
+
+
+def post_user(request: Request, db: Session):
+    posts = db.query(Post).all()
+    post_list = []
+    for post in posts:
+        post_dict = {}
+        post_dict["username"] = post.users.username
+        post_dict["post"] = post
+        post_list.append(post_dict)
+
+    if not posts:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
+        )
+    return post_list

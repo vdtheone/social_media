@@ -1,8 +1,8 @@
 from typing import Annotated, List
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, Form, Request, UploadFile
-from src.services.post import create_post, get_all_post, post_by_id
-from src.schemas.post import PostSchema
+from src.services.post import create_post, get_all_post, post_by_id, post_user, post_with_user_
+from src.schemas.post import PostSchema, PostWithUser, PostWithUser_
 from src.config import SessionLocal
 
 
@@ -38,3 +38,14 @@ def all_post(request: Request, db: Session = Depends(get_db)):
 def one_post(id: int, request: Request, db: Session = Depends(get_db)):
     post = post_by_id(id, request, db)
     return post
+
+
+@post_router.get("/post_user",response_model=List[PostWithUser_])
+def post_user_(request: Request, db: Session = Depends(get_db)):
+    return post_with_user_(request, db)
+    
+
+@post_router.get("/posts_user",response_model=List[PostWithUser])
+def post_with_user(request: Request, db: Session = Depends(get_db)):
+    return post_user(request, db)
+    
