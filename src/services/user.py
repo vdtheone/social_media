@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from fastapi import HTTPException, Request, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
@@ -14,6 +15,26 @@ from src.utils.generate_jwt_token import (
     verify_password,
 )
 from src.utils.required_jwt import access_token_required
+
+
+def Oauth2Login(oauth2formdata: OAuth2PasswordRequestForm, db: Session):
+    user = db.query(User).filter(User.username == oauth2formdata.username).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect username or password",
+        )
+
+    if not verify_password(oauth2formdata.password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect username or password",
+        )
+
+    access_token = create_jwt_token({"id": user.id, "username": user.username})
+
+    token = {"access_token": access_token, "token_type": "bearer"}
+    return token
 
 
 def create_user_new(request: Request, user: CreateUserSchema, db: Session):
@@ -67,7 +88,7 @@ def all_user(request: Request, db: Session):
     return all_user
 
 
-def get_user_by_id(id: int, request: Request, db: Session):
+def get_user_by_id(id: int, db: Session):
     user = (
         db.query(User)
         .filter(User.id == id, User.is_active is True, User.is_deleted is False)
