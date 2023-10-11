@@ -21,7 +21,7 @@ from src.services.user import (
     login,
     update_user_details,
 )
-from utils.current_user_dependency import get_current_user
+from src.utils.current_user_dependency import get_current_user
 
 user_router = APIRouter()
 
