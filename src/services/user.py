@@ -34,7 +34,7 @@ def Oauth2Login(oauth2formdata: OAuth2PasswordRequestForm, db: Session):
     access_token = create_jwt_token({"id": user.id, "username": user.username})
 
     # pass only token because OAuth2 return token with Bearer prefix
-    access_token = access_token.split()[0]
+    access_token = access_token.split()[1]
 
     token = {"access_token": access_token, "token_type": "bearer"}
     return token
