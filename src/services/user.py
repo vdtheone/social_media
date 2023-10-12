@@ -33,6 +33,9 @@ def Oauth2Login(oauth2formdata: OAuth2PasswordRequestForm, db: Session):
 
     access_token = create_jwt_token({"id": user.id, "username": user.username})
 
+    # pass only token because OAuth2 return token with Bearer prefix
+    access_token = access_token.split()[0]
+
     token = {"access_token": access_token, "token_type": "bearer"}
     return token
 
@@ -89,11 +92,7 @@ def all_user(request: Request, db: Session):
 
 
 def get_user_by_id(id: int, db: Session):
-    user = (
-        db.query(User)
-        .filter(User.id == id, User.is_active is True, User.is_deleted is False)
-        .first()
-    )
+    user = db.query(User).filter(User.id == id, User.is_active).first()
     # user = db.query(User).order_by(desc(User.liked_posts)).all()
     if not user:
         raise HTTPException(
