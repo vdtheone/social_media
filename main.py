@@ -14,7 +14,7 @@ config = Config(".env")  # Load environment variables
 app.add_middleware(SessionMiddleware, secret_key=config("SECRET_KEY"))
 
 app.include_router(auth_router, tags=["Auth"])
-app.include_router(user_router, tags=["user"])
-app.include_router(post_router, tags=["post"])
-app.include_router(comment_router, tags=["comment"])
-app.include_router(like_router, tags=["like"])
+app.include_router(user_router, tags=["User"])
+app.include_router(post_router, tags=["Post"])
+app.include_router(comment_router, tags=["Comment"])
+app.include_router(like_router, tags=["Like"])
