@@ -74,7 +74,7 @@ def user_by_id(
 ):
     user = get_user_by_id(id, db)
     print(user)
-    return current_user
+    return user
 
 
 @user_router.get("/posts/{id}")
