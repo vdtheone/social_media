@@ -28,7 +28,8 @@ async def get_current_user(
     token: str = Depends(reuseable_oauth), db: Session = Depends(get_db)
 ):
     try:
-        token = token.split()[1]
+        # print(token)
+        # token = token.split()[1]
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         if payload is None:
             raise HTTPException(
