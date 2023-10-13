@@ -42,7 +42,9 @@ async def login_(
     return token
 
 
-@user_router.get("/me", summary="Get details of currently logged in user")
+@user_router.get(
+    "/me", response_model=GetUser, summary="Get details of currently logged in user"
+)
 async def get_me(user: User = Depends(get_current_user)):
     return user
 
