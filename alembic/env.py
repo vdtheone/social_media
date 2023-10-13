@@ -9,6 +9,7 @@ from src.models.comment import Comment
 from src.models.like import Like
 from src.models.user import User
 from src.models.post import Post
+from src.models.follower import Follower
 from src.config import Base
 
 # this is the Alembic Config object, which provides
