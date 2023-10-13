@@ -15,7 +15,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     first_name = Column(String)
     last_name = Column(String)
-    mobile_no = Column(Integer)
+    mobile_no = Column(String)
     username = Column(String, unique=True)
     password = Column(String)
     is_active = Column(Boolean, default=True)
