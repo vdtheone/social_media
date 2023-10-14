@@ -11,6 +11,8 @@ class GetUser(BaseModel):
     last_name: str
     mobile_no: int
     username: str
+    no_of_follower: int
+    no_of_following: int
     created_at: datetime
     updated_at: datetime
     is_active: bool
