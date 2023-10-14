@@ -15,7 +15,6 @@ def getGoogleOAuthToken(request: Request):
         "redirect_uri": config("YOUR_REDIRECT_URI"),
         "grant_type": "authorization_code",
     }
-
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
     response = requests.post(base_url, data=options, headers=headers)
@@ -26,7 +25,6 @@ def getGoogleOAuthToken(request: Request):
 
 def getGoogleUser(access_token, id_token):
     url = f"https://www.googleapis.com/oauth2/v3/userinfo?access_token={access_token}"
-
     headers = {"Authorization": f"Bearer {id_token}"}
 
     try:

@@ -35,13 +35,11 @@ async def create_post(
 
     with open(os.path.join(IMGDIR, filename), "wb") as my_file:
         my_file.write(data)
-
     new_post = Post(location=location, caption=caption, image=filename, user_id=user_id)
 
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
-
     return {"Message": "Post Created"}
 
 
@@ -52,12 +50,8 @@ def get_all_post(request: Request, db: Session):
 
 def post_by_id(id: int, request: Request, db: Session):
     post = db.query(Post).get(id)
-
     with open(os.path.join(IMGDIR, post.image), "rb") as my_file:
-        data = my_file.read()
-
-    print(data)
-
+        my_file.read()
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
@@ -67,10 +61,8 @@ def post_by_id(id: int, request: Request, db: Session):
 
 def post_with_user_(request: Request, db: Session):
     posts = db.query(Post).all()
-
     for post in list(posts):
         post.__dict__.update({"username": post.users.username})
-
     if not posts:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
@@ -111,5 +103,4 @@ def delete_all_post(request: Request, post: SelectedPost, db: Session):
         if post:
             db.delete(post)
             db.commit()
-
     return {"message": "Selected Posts Deleted"}

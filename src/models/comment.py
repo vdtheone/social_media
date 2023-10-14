@@ -33,8 +33,3 @@ def increment_comment_count(mapper, connection, comment):
     post.number_of_comments = post.number_of_comments + 1
     db.commit()
     db.refresh(post)
-    # connection.execute(
-    #     Post.__table__.update()
-    #     .values(number_of_comments=post.number_of_comments)
-    #     .where(Post.id == post_id)
-    # )

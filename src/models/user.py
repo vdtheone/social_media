@@ -6,9 +6,6 @@ from sqlalchemy.orm import relationship
 from src.config import Base
 from src.models.follower import Follower
 
-# from models.like import Like
-# from models.post import Post
-
 
 class User(Base):
     __tablename__ = "users"
@@ -31,7 +28,6 @@ class User(Base):
 
     # Relationship: Many-to-Many with Post (to represent liked posts)
     liked_posts = relationship("Post", secondary="likes", back_populates="likers")
-
     followers = relationship(
         "Follower", foreign_keys=[Follower.follow_id], backref="followed_user"
     )

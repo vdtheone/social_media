@@ -5,9 +5,6 @@ from sqlalchemy.orm import relationship
 
 from src.config import Base
 
-# from src.models.user import User
-# from src.models.like import Like
-
 
 class Post(Base):
     __tablename__ = "posts"

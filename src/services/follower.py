@@ -85,10 +85,7 @@ def feed(user, db: Session):
         .filter(Follower.follow_by_id == user.id)
         .all()
     )
-    all_posts = []
-    for i in following_query:
-        all_posts.append(i.posts)
-    return all_posts
+    return following_query
 
 
 def all_request(user, db: Session):

@@ -10,7 +10,7 @@ class FollowRequestSchema(BaseModel):
         from_attributes = True
 
 
-class FShcema(BaseModel):
+class FollowRequestSchemaReturn(BaseModel):
     id: int
     request: str
     follow_by_id: int
