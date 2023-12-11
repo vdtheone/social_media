@@ -1,23 +1,15 @@
 import os
 
 from fastapi import HTTPException, Request, status
-from jose import ExpiredSignatureError, JWTError
+from jose import ExpiredSignatureError, JWTError, jwt
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = os.environ.get("ALGORITHM")
 
 
 def access_token_required(func):
-    def inner(*args):
+    def inner(request: Request, *args):
         try:
-            request = None
-            for i in args:
-                if isinstance(i, Request):
-                    request = i
-
-            if not request:
-                raise HTTPException(status_code=500, detail="Request not found")
-
             access_token = request.headers.get("Authorization")
 
             if not access_token:
@@ -30,7 +22,7 @@ def access_token_required(func):
 
             access_token = access_token.split()[1]
 
-            # jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
+            jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
             return func(*args)
         except ExpiredSignatureError:
             raise HTTPException(status_code=401, detail="Token Expired")
